@@ -1,4 +1,5 @@
 --!strict
+--!native
 --[[
 	Author(s):		WATDAHECKLOL32
 	Name:           FirearmClass.luau
