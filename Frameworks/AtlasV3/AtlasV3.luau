@@ -39,6 +39,8 @@ local ColllectionService = game:GetService("CollectionService");
 local AtlasRemoteEvent: (RemoteEvent) = ReplicatedStorage.Atlas_Remote;
 local AtlasRemoteFunction: (RemoteFunction) = ReplicatedStorage.Atlas_RemoteFunction;
 
+local Corepackages = ReplicatedStorage["Atlas/CoreModules"]:GetChildren();
+
 export type Modules =  {
 	[string]: {ModuleScript?};
 };
@@ -62,8 +64,8 @@ local Objects: (Objects) = {};
 
 local MuteInstanceWarn: (boolean) = false;
 
-local IsClient = RunService:IsClient();
-local IsServer = RunService:IsServer();
+local IsClient: (boolean) = RunService:IsClient();
+local IsServer: (boolean) = RunService:IsServer();
 
 local print = function(...)
 	print("[ATLAS/OUTPUT]: ", ...);
@@ -73,6 +75,30 @@ local warn = function(...)
 	warn("[ATLAS/OUTPUT]: ", ...);
 end;
 
+--[=[
+	@within Atlas
+	@method Atlas.GetCoreModule
+	@tag Instance Related
+	@param Name String -- Name of the module.
+	@return Module -- Returns the required module
+	
+	Allows you to quickly get modules inside Atlas/CoreModules (kinda how flux is).
+]=]
+function Atlas.GetCoreModule(Name: (string) )
+	assert(Name, "Attempt to call Atlas.GetCoreModule with missing name.");
+	
+	local found = false;	
+	for _,Module: (ModuleScript?) in next, Corepackages do
+		if Module and Module:IsA("ModuleScript") and tostring(Module) == Name then
+			found = true;
+			return require(Module);
+		end;
+	end;
+	
+	if not found then
+		warn("GetCoreModule called with invaild (missing or nil) module name", Name)
+	end;
+end;
 
 --[=[
 	@within Atlas
@@ -89,12 +115,12 @@ function Atlas:Import(ModuleName: (any) )
 
 	local ModuleFound = false;
 
-	for _,v: (ModuleScript) in next, ColllectionService:GetTagged("Atlas_Module") do
-		if v:IsA("ModuleScript") and ModuleName == tostring(v) then
+	for _,ModuleScript: (ModuleScript?) in next, ColllectionService:GetTagged("Atlas_Module") do
+		if ModuleScript and ModuleScript:IsA("ModuleScript") and ModuleName == tostring(ModuleScript) then
 			ModuleFound = true
 			
 			local Succ, Result = pcall(function()
-				return require(v);
+				return require(ModuleScript);
 			end);
 
 			if Succ then
@@ -133,7 +159,7 @@ function Atlas:RecursiveImport(ModuleName: (string), InstanceToSearch: (Instance
 	Stuff = InstanceToSearch:GetDescendants()
 
 	for _,Instances: (ModuleScript?) in Stuff do
-		if Instances:IsA("ModuleScript") and tostring(Instances) == ModuleName then
+		if Instances and Instances:IsA("ModuleScript") and tostring(Instances) == ModuleName then
 			return require(Instances);
 		end;
 	end;
@@ -159,7 +185,7 @@ function Atlas:GetObject(ObjectName: (string) )
 	end;
 
 	for _,Object: (Instance?) in next, ColllectionService:GetTagged("Atlas_Object") do
-		if tostring(Object) == ObjectName then
+		if Object and tostring(Object) == ObjectName then
 			ObjectFound = true
 			Objects[ObjectName] = Object;
 			return Object;
@@ -180,7 +206,7 @@ end;
 
 	Allows you to bind functions to the Atlas_RemoteEvent.
 ]=]
-function Atlas:BindToRemoteEvent(EventName: (string), CallBack: (any) )
+function Atlas:BindToRemoteEvent(EventName: (string), CallBack)
 	assert(EventName, "Attempt to call Atlas:BindToEvent but no eventname was provided.");
 	assert(CallBack, "Attempt to call Atlas:BindToEvent but no function was provided.");
 
@@ -347,7 +373,7 @@ do
 				return nil;
 			end;
 		end,
-	}, { __index = Atlas })
+	}, { __index = Atlas });
 
 	Atlas.network = link
 
