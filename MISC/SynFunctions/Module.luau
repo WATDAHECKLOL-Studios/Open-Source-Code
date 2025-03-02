@@ -7,7 +7,7 @@
 	
 	In order to use this, you need a custom LUA VM module and combine the enviroment with this custom one.
 	
-    --------------
+         --------------
     
 	Current \ working functions:
 	
@@ -32,7 +32,7 @@
 	getrawmetatable
 	
 	
-   --------------
+       --------------
 
 	Maybe cant do:
 	hookfunction
@@ -43,7 +43,7 @@
 	
 	actual newcclosure
 
-	getreg Reason
+	getreg
 	getgc
 	
 	setreadonl
