@@ -7,7 +7,7 @@
 	
 	In order to use this, you need a custom LUA VM module and combine the enviroment with this custom one.
 	
-         --------------
+        --------------
     
 	Current \ working functions:
 	
@@ -44,7 +44,7 @@
 	actual newcclosure
 
 	getreg
-	getgc
+	getgc ( Even with a custom lua VM)
 	
 	setreadonl
 	sethiddenproperty
