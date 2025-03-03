@@ -131,20 +131,7 @@ local a = function()
 		end,
 
 		checkcaller = function() : (boolean)
-			local ind = 1
-			while {} do
-				local info = __info(ind, "f");
-				if type(info) ~= "function" then
-					ind = ind - 1 
-					info = type(info) == "table" and info or {} 
-					if info["source"] == "@[C]" and info["name"] == "xpcall" then 
-						return false;
-					end
-					break;
-				end;
-				ind = ind + 1;
-			end;
-			return true;
+			return false;
 		end;
 
 		hookmetamethod = function(real_instance: Instance, operand: {[string]: any}) : (any)
