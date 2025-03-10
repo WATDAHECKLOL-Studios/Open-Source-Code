@@ -53,7 +53,7 @@ local function HandleTouch(Door:{ Config: { Card: { Value: number } } }, OtherPa
 end;
 
 
-@native function ElevatorClass.new(Elevator: (any) )
+function ElevatorClass.new(Elevator: (any) )
 	local self: (Elevator) = setmetatable({
 		_Model = Elevator;
 		_Floor = 1;
@@ -86,13 +86,13 @@ end;
 	local Floor1Zone = Zone.new(Elevator.Elevator1.Zone1)
 	local Floor2Zone = Zone.new(Elevator.Elevator2.Zone2)
 	
-	Floor1Zone.playerEntered:Connect(@native function(Player: (Player) )
+	Floor1Zone.playerEntered:Connect(function(Player: (Player) )
 		if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
 			table.insert(self._PlayersOnFloor1, Player)
 		end;
 	end);
 	
-	Floor1Zone.playerExited:Connect(@native function(Player: (Player) )
+	Floor1Zone.playerExited:Connect(function(Player: (Player) )
 		if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
 			local Index = table.find(self._PlayersOnFloor1, Player)
 			
@@ -103,13 +103,13 @@ end;
 	end);
 	
 
-	Floor2Zone.playerEntered:Connect(@native function(Player: (Player) )
+	Floor2Zone.playerEntered:Connect(function(Player: (Player) )
 		if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
 			table.insert(self._PlayersOnFloor2, Player)
 		end;
 	end);
 
-	Floor2Zone.playerExited:Connect(@native function(Player: (Player) )
+	Floor2Zone.playerExited:Connect(function(Player: (Player) )
 		if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
 			local Index = table.find(self._PlayersOnFloor2, Player)
 
